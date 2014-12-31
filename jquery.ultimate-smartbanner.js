@@ -4,29 +4,71 @@
  * Forked from the Copyrighted project 'jquery.smartbanner' [Copyright (c) 2012 Arnold Daniels <arnold@jasny.net>]
  * Based on 'jQuery Smart Web App Banner' by Kurt Zenisek @ kzeni.com
  */
+"use strict";
+
 !function ($) {
   var SmartBanner = function (options) {
     this.options = $.extend({}, $.smartbanner.defaults, options);
 
     var standalone = navigator.standalone; // Check if it's already a standalone web app or running within a webui view of an app (not mobile safari)
 
-    // Detect banner type (iOS, Android, Windows Phone or Windows RT)
+    // ----------------- //
+
+    // Default device param
+    var defaultOptions = {
+      devices : {
+        "ios" : {
+          test : (
+            (navigator.userAgent.match(/iPad|iPhone|iPod/i) != null && navigator.userAgent.match(/Safari/i) != null)
+            && (
+            (window.Number(navigator.userAgent.substr(navigator.userAgent.indexOf('OS ') + 3, 3).replace('_', '.')) < 6)
+            || navigator.userAgent.match(/Version/i) == null
+            )
+          )
+        },
+        "android" : {
+          test : (navigator.userAgent.match(/Android/i) != null)
+        },
+        "windows" : {
+          test : (navigator.userAgent.match(/Windows NT 6.2/i) != null)
+        },
+        "windows-phone" : {
+          test : (navigator.userAgent.match(/Windows Phone/i) != null)
+        }
+      }
+    };
+
+    // Detect banner type (iOS, Android, Windows Phone or Windows RT, or other)
     if (this.options.force) {
       this.type = this.options.force
-    } else if (navigator.userAgent.match(/iPad|iPhone|iPod/i) != null && navigator.userAgent.match(/Safari/i) != null) {
-      if (
-        (window.Number(navigator.userAgent.substr(navigator.userAgent.indexOf('OS ') + 3, 3).replace('_', '.')) < 6)
-        || navigator.userAgent.match(/Version/i) == null
-      )
-        this.type = 'ios'; // Check webview and native smart banner support (iOS 6+)
-    } else if (navigator.userAgent.match(/Android/i) != null) {
-      this.type = 'android'
-    } else if (navigator.userAgent.match(/Windows NT 6.2/i) != null) {
-      this.type = 'windows'
-    } else if (navigator.userAgent.match(/Windows Phone/i) != null) {
-      this.type = 'windows-phone'
+    } else {
+      // Todo : change "defaultOptions"
+      for(var device in defaultOptions.devices) {
+        if(defaultOptions.devices[device].test){
+          this.type = device;
+        }
+      }
     }
+    /*
+     // Detect banner type (iOS, Android, Windows Phone or Windows RT)
+     if (this.options.force) {
+     this.type = this.options.force
+     } else if (navigator.userAgent.match(/iPad|iPhone|iPod/i) != null && navigator.userAgent.match(/Safari/i) != null) {
+     if (
+     (window.Number(navigator.userAgent.substr(navigator.userAgent.indexOf('OS ') + 3, 3).replace('_', '.')) < 6)
+     || navigator.userAgent.match(/Version/i) == null
+     )
+     this.type = 'ios'; // Check webview and native smart banner support (iOS 6+)
+     } else if (navigator.userAgent.match(/Android/i) != null) {
+     this.type = 'android'
+     } else if (navigator.userAgent.match(/Windows NT 6.2/i) != null) {
+     this.type = 'windows'
+     } else if (navigator.userAgent.match(/Windows Phone/i) != null) {
+     this.type = 'windows-phone'
+     }
+     */
 
+    // ----------------- //
     // Don't show banner if device isn't iOS or Android, website is loaded in app or user dismissed banner
     if (!this.type || standalone || this.getCookie('sb-closed') || this.getCookie('sb-installed')) {
       return
