@@ -177,6 +177,7 @@
     }
 
     , hide: function (callback) {
+      $('#smartbanner', 'html.smartBanner').hide(); // based on lines 126 and 174-175
       $('html').removeClass('smartBanner');
       if(callback)  callback();
     }
