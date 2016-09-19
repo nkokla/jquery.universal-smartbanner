@@ -19,12 +19,12 @@
         || navigator.userAgent.match(/Version/i) == null
       )
         this.type = 'ios'; // Check webview and native smart banner support (iOS 6+)
+    } else if (navigator.userAgent.match(/Windows Phone/i) != null) {
+      this.type = 'windows-phone'
     } else if (navigator.userAgent.match(/Android/i) != null) {
       this.type = 'android'
     } else if (navigator.userAgent.match(/Windows NT 6.2/i) != null) {
       this.type = 'windows'
-    } else if (navigator.userAgent.match(/Windows Phone/i) != null) {
-      this.type = 'windows-phone'
     }
 
     // Don't show banner if device isn't iOS or Android, website is loaded in app or user dismissed banner
