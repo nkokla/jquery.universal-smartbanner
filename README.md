@@ -14,6 +14,9 @@ The differences with the original branch are :
 - Support Windows RT
 - Animations of the banner with CSS
 
+## _Low maintenance_ ##
+_Like the original projet 'jQuery Smart Banner', this project is currently not being actively maintained. Issues will not be solved, but pull requests might be merged. Thanks._
+
 ## Usage ##
 The script "Ultimate Smart Banner" use "meta tags" for configuring the banner display.
 
